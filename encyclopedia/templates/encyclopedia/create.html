@@ -5,9 +5,15 @@
 {% endblock %}
 
 {% block body %}
+<form action="{% url 'wiki:create' %}" method="post">
+    {% csrf_token %}
 
-<h1>i'm here</h1>
-<h2>{{var}}</h2>
+    <div class="fieldWrapper">
 
+        {{form.as_div}}
+    </div>
+    
+        <input type="submit" value="Submit">
+</form>
 {% endblock %}
 

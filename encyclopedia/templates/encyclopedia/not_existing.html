@@ -1,0 +1,15 @@
+{%extends 'encyclopedia/layout.html'%}
+
+{% block title %}
+    {{title}}
+{% endblock %}
+
+{%block body%}
+
+    <h1>Warning!</h1>
+
+    <p>The page for <b>{{title}}</b> doesn't exist :( </p>
+
+    <a href="{%url 'wiki:create' %}">Create it now.</a>
+
+{%endblock%}

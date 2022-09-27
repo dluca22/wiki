@@ -6,7 +6,9 @@ app_name='wiki'
 
 urlpatterns = [
     path('', views.index, name='index'),
-    path('random', views.random, name='random'),
+    path('search', views.search, name='search'),
     path('create', views.create, name='create'),
-    path('<str:title>', views.entry, name='title'),
+    # if i use 'random' creates problems
+    path('rndm', views.random, name='random'),
+    path('<str:title>', views.getpage, name='title'),
 ]

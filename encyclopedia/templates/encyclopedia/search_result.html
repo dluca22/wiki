@@ -1,0 +1,21 @@
+{%extends 'encyclopedia/layout.html'%}
+
+{%block body%}
+<!-- if there are elements in the matches list -->
+{% if matches %}
+    <h2>Found Matches:</h2>
+
+    {% for matching in matches %}
+
+    <li><a href="{% url 'encyclopedia:title' matching %}">{{ matching }}</a></li>
+
+    {%endfor%}
+<!-- if the list is empty == no matches -->
+{%elif not matches%}
+    <h2>Uh-oh!</h2>
+    <p>The page for <b>{{query}}</b> doesn't exist :( </p>
+
+    <a href="{%url 'wiki:create' %}">Create it now.</a>
+{%endif%}
+
+{% endblock%}
