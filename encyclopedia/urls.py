@@ -11,4 +11,7 @@ urlpatterns = [
     # if i use 'random' creates problems
     path('rndm', views.random, name='random'),
     path('<str:title>', views.getpage, name='title'),
+    path('delete/<str:title>', views.deletepage, name='delete'),
+    path('edit/<str:title>', views.editpage, name='edit'),
+
 ]

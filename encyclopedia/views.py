@@ -4,19 +4,21 @@ from django.shortcuts import render, redirect
 from http.client import HTTPResponse
 from markdown2 import Markdown
 from random import choice
+from django.core.files.storage import default_storage
+
 
 from . import util
 
-
+# Django From class
 class SubmitForm (forms.Form):
     # title = forms.CharField(label="Title")
     title = forms.CharField(label='Title', max_length=50, min_length=1)
-
-    text = forms.CharField(widget=forms.Textarea(attrs={'placeholder':'Text body'}), label='Text', min_length=10, max_length=500, required=True,)
+    ## TODO change min length to 10+
+    text = forms.CharField(widget=forms.Textarea(attrs={'placeholder':'Text body'}), label='Text', min_length=1, max_length=500, required=True,)
     # text =  forms.CharField(widget=forms.TextInput(attrs={'text':'text'}))
 
-# ====================================================
 
+# ====================================================
 def index(request):
     return render(request, "encyclopedia/index.html", {
         "entries": util.list_entries()
@@ -26,7 +28,7 @@ def index(request):
 
 # view for article request
 def getpage(request, title):
-    # call util functio returning <name> or None:
+    # call util function returning <name> or None:
     article = util.get_entry(title)
     # if None > error page
     if article is None:
@@ -36,6 +38,15 @@ def getpage(request, title):
     else:
         markdowner = Markdown()
         return render(request, "encyclopedia/article.html", {'article': markdowner.convert(article), 'title': title})
+
+# ====================================================
+# every article has delete button
+def deletepage(request, title):
+    # copy util.py but only delete object then redirect to index page with updated list
+    filename = f"entries/{title}.md"
+    if default_storage.exists(filename):
+        default_storage.delete(filename)
+        return render(request, "encyclopedia/index.html", {"entries": util.list_entries()})
 
 # ====================================================
 # no need to use Django Forms Classes
@@ -66,16 +77,44 @@ completare la struttura della form poi aggiungere la logica per 'POST'
 def create(request):
 
     if request.method == "POST":
+
+        # Django get the form data from post request
         form = SubmitForm(request.POST)
+
+        #Django form validation
         if form.is_valid():
             title = form.cleaned_data['title']
-            text = form.cleaned_data['text']
+            content = form.cleaned_data['text']
 
-            return HttpResponseRedirect(f'{title} and {text}')
+            # get list and find if the title EQUALS one in the list (while compared lowercase)
+            article_list = util.list_entries()
+            article = [x for x in article_list if title.lower() == x.lower()]
 
-    else:
-        return render(request, "encyclopedia/create.html", {'form':SubmitForm()})
+            # if there's an article, display error page with the link to it
+            # create.html handles what to display based on error "conflict" being passed
+            if article:
+                return render(request, "encyclopedia/create.html", {'error': "conflict", 'title': article[0] })
 
+            # if no article found, save it to file with util func and redirect to page
+            else:
+                util.save_entry(title=title, content=content)
+                return HttpResponseRedirect(f"{title}")
+
+    # get request displays submit form
+    return render(request, "encyclopedia/create.html", {'form':SubmitForm()})
+
+# ====================================================
+def editpage(request, title):
+
+    if request.method == "POST":
+        # save logic
+        return HttpResponseRedirect(f"{title}")
+
+    article = util.get_entry(title)
+
+    article_body = SubmitForm({'body': article})
+
+    return render(request, "encyclopedia/edit.html", {'form':SubmitForm(), 'thing':title, 'body': article_body})
 # ====================================================
 
 def random(request):

@@ -1,10 +1,11 @@
 {% extends "encyclopedia/layout.html" %}
 
 {% block title %}
-    Create new entry
+Create new entry
 {% endblock %}
 
 {% block body %}
+{%if not error %}
 <form action="{% url 'wiki:create' %}" method="post">
     {% csrf_token %}
 
@@ -12,8 +13,20 @@
 
         {{form.as_div}}
     </div>
-    
-        <input type="submit" value="Submit">
-</form>
-{% endblock %}
 
+    <input type="submit" value="Submit">
+</form>
+
+{%elif error == "conflict" %}
+<h2><a href="{% url 'encyclopedia:title' title %}">{{title}}</a> page already exists! </h2>
+
+<div>
+    <a href="{% url 'wiki:index' %}">Home</a>
+</div>
+<div>
+    <a href="{% url 'wiki:create' %}">Create New Page</a>
+</div>
+
+{%endif%}
+
+{% endblock %}
