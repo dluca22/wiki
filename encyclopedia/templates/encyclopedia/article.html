@@ -1,10 +1,22 @@
 {%extends 'encyclopedia/layout.html'%}
 {% block title %}{{title}}{% endblock %}
 {%block body%}
+<div class="row">
+<div class="col-8">
+<!-- display form containing article body with safe filter -->
+        {{article | safe}}
+</div>
 
-    {{article | safe}}
+</div>
 
+<!-- row for buttons for delete and edit page -->
+<div class="row">
+    <div class="col-2 align-self-end">
+        <a href="{%url 'wiki:delete' title%}"><button class="btn btn-danger" name="next">Delete</button></a>
+    </div>
 
-    <a href="{%url 'wiki:delete' title%}"><button name="next">Delete</button></a>
-    <a href="{%url 'wiki:edit' title%}"><button name="next">Edit</button></a>
+    <div class="col-2">
+        <a href="{%url 'wiki:edit' title%}"><button class="btn btn-success" name="next">Edit</button></a>
+    </div>
+</div>
 {%endblock%}

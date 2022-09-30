@@ -5,11 +5,21 @@
 {% endblock %}
 
 {% block body %}
-    <h1>All Pages</h1>
+<h1>All Pages</h1>
 
     <ul>
+        <!-- Build a list of all entries from the database -->
         {% for entry in entries %}
             <li><a href="{% url 'encyclopedia:title' entry %}">{{ entry }}</a></li>
+
+        <!-- if no entry, show default message -->
+        {%empty%}
+
+        <p>There are no articles in the database</p>
+
+        <div class="row">
+            <a href="{% url 'wiki:create' %}"><button class="btn btn-warning">Create one!</button></a>
+        </div>
         {% endfor %}
     </ul>
 

@@ -5,7 +5,9 @@ Create new entry
 {% endblock %}
 
 {% block body %}
+<!-- if no error conflict is passed, show form -->
 {%if not error %}
+
 <form action="{% url 'wiki:create' %}" method="post">
     {% csrf_token %}
 
@@ -14,17 +16,22 @@ Create new entry
         {{form.as_div}}
     </div>
 
-    <input type="submit" value="Submit">
+    <input type="submit" class="btn btn-primary" value="Submit">
 </form>
 
+<!-- if views.create finds a conflict, show error message and link to the existing page (case insensitive) -->
 {%elif error == "conflict" %}
-<h2><a href="{% url 'encyclopedia:title' title %}">{{title}}</a> page already exists! </h2>
+<h2> "<u style='font-size:larger;'>{{query}}</u>" might already exist! </h2>
 
+<h5>Take a look:</h5>
+
+<p><a href="{% url 'encyclopedia:title' title %}">{{title}}</a></p>
+
+<hr>
+
+<!-- button to create new page -->
 <div>
-    <a href="{% url 'wiki:index' %}">Home</a>
-</div>
-<div>
-    <a href="{% url 'wiki:create' %}">Create New Page</a>
+    <a href="{% url 'wiki:create' %}"><button class="btn btn-warning">Create New Page</button></a>
 </div>
 
 {%endif%}

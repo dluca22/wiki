@@ -1,5 +1,8 @@
 from django.urls import path
 
+from wiki.settings import STATIC_URL
+# from django.contrib.staticfiles.urls import staticfiles_urlpatterns
+
 from . import views
 
 app_name='wiki'

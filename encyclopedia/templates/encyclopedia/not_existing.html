@@ -5,11 +5,11 @@
 {% endblock %}
 
 {%block body%}
-
-    <h1>Warning!</h1>
+    
+    <h1 class="warning-err">Warning!</h1>
 
     <p>The page for <b>{{title}}</b> doesn't exist :( </p>
 
-    <a href="{%url 'wiki:create' %}">Create it now.</a>
+    <a href="{%url 'wiki:create' %}"><button class="btn btn-warning">Create it now!</button></a>
 
 {%endblock%}

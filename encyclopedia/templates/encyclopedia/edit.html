@@ -1,22 +1,33 @@
 {% extends "encyclopedia/layout.html"%}
 
-{% block title %} Editing {{thing}} {%endblock%}
+{% block title %} Editing {{article}} {%endblock%}
 
 {% block body %}
 
-
-<form action="{% url 'wiki:create' %}" method="post">
+<!-- if view.edit doesn't find an error show edit form-->
+{%if not error %}
+<form action="{% url 'wiki:edit' article %}" method="post">
     {% csrf_token %}
 
-    <h2>Editing {{thing}} article:</h2>
+    <h2>Editing {{article}} article:</h2>
     <hr>
-    <div class="fieldWrapper">
 
-        {{form.as_p}}
-
+    <div>
+        {{form.text}}
     </div>
+    <input type="submit" class="btn btn-primary" value="Submit">
 
-    <input type="submit" value="Submit">
 </form>
+
+<!-- if user forces url to non existing page, show error message and button create -->
+{%elif error == "missing" %}
+<h2><u><em>{{article}}</em></u> page doesn't exist! </h2>
+
+<hr>
+<div>
+    <a href="{% url 'wiki:create' %}"><button class="btn btn-warning">Create a page for it!</button></a>
+</div>
+
+{%endif%}
 
 {%endblock%}

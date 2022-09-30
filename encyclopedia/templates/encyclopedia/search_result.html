@@ -12,10 +12,12 @@
     {%endfor%}
 <!-- if the list is empty == no matches -->
 {%elif not matches%}
-    <h2>Uh-oh!</h2>
+    <h2 class="warning-err">Uh-oh!</h2>
     <p>The page for <b>{{query}}</b> doesn't exist :( </p>
 
-    <a href="{%url 'wiki:create' %}">Create it now.</a>
+
+    <!-- button to create article if not existing -->
+    <a href="{%url 'wiki:create' %}"><button class="btn btn-warning">Create it now.</button></a>
 {%endif%}
 
 {% endblock%}
