@@ -62,6 +62,8 @@ def search(request):
 
     # if it is exact match go directly
     if query in articles:
+        # should have been
+        # return HttpResponseRedirect(reverse('query')) O QUALCOSA DEL GENERE   
         return HttpResponseRedirect(f'{query}')
 
     # else go to result passing the list of matching names
